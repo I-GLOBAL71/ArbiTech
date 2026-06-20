@@ -227,3 +227,30 @@ Stage Summary:
 - Fallback intelligent : si réseau down, simulation prend le relais pour ne jamais laisser le flux vide.
 - Transparence utilisateur : badge "Live" + bandeau "Données de marché réelles" distinguent les vraies opportunités des simulées.
 - Le P2P USDT/FCFA affiche un VRAI spread de +6.76% (achat 599 → vente 640 FCFA) — opportunité réellement exécutable.
+
+---
+Task ID: DEPLOY
+Agent: orchestrator (Z.ai Code)
+Task: Préparer le déploiement Vercel + Neon Postgres et pousser sur GitHub.
+
+Work Log:
+- Adapté prisma/schema.prisma : provider sqlite → postgresql, ajout directUrl (fallback sur DATABASE_URL) pour Neon.
+- Corrigé src/lib/exchange-fetcher.ts : retiré `require.main === module` (incompatible ESM sur Vercel), remplacé par un commentaire de usage CLI.
+- Créé vercel.json : framework nextjs, buildCommand "prisma generate && next build", cron job */1 * * * * vers /api/cron/warm-cache (cache warming serverless), region fra1.
+- Créé src/app/api/cron/warm-cache/route.ts : route protégée par CRON_SECRET (header Authorization Bearer ou ?secret=), fetch un nouveau snapshot si cache >30s, sinon cache_hit.
+- Créé .env.example : DATABASE_URL (Neon pooled), DIRECT_URL (Neon direct), CRON_SECRET, + optionnel VAPID et Stripe.
+- Créé README.md complet : présentation, stack, déploiement Vercel+Neon étape par étape, dev local, structure projet, stratégie scraping, avertissement.
+- Mis à jour package.json : name "arbitech", build "prisma generate && next build", start "next start", postinstall "prisma generate || true", script seed.
+- Mis à jour next.config.ts : retiré output:standalone (Vercel native), reactStrictMode true, experimental optimizePackageImports.
+- Mis à jour tsconfig.json : exclude skills/, examples/, mini-services/, download/, upload/ (pas partie de l'app).
+- Mis à jour .gitignore : .env et .env.* ignorés (!.env.example), *.db et db/*.db ignorés, logs (opportunity-feed.log etc.), /skills/ /examples/ /download/ /upload/ /agent-ctx/ ignorés.
+- Sécurité : git rm --cached .env db/custom.db (retirés du tracking, restaient en local). Vérifié aucun .env/.db dans le repo final.
+- Commit "feat: production-ready for Vercel + Neon Postgres deployment".
+- Ajouté remote origin (https://github.com/lmch2025/ArbiTech.git), push avec token, puis retiré le token de la config git.
+- Push réussi : 155 fichiers, branche main, HEAD ac428e6.
+
+Stage Summary:
+- Code sur GitHub : https://github.com/lmch2025/ArbiTech (branche main, 155 fichiers).
+- Prêt pour Vercel : vercel.json (cron + build), Prisma PostgreSQL, postinstall prisma generate.
+- Sécurité : aucun secret dans le repo (.env et db/custom.db untrackés), token GitHub retiré de la config git après push.
+- Prochaines étapes utilisateur : (1) importer le repo sur Vercel, (2) créer un projet Neon et récupérer DATABASE_URL + DIRECT_URL, (3) configurer les env vars Vercel, (4) déployer, (5) lancer db:push + seed contre Neon, (6) configurer le cron secret.
