@@ -36,7 +36,7 @@ import { formatFcfa, formatPercent } from "@/lib/format";
 import type { Opportunity } from "@/lib/types";
 import { planToneClass } from "@/lib/constants";
 
-export function LandingView() {
+export function LandingView({ initialOpportunities = [] }: { initialOpportunities?: Opportunity[] }) {
   const setView = useApp((s) => s.setView);
   const setAuthMode = useApp((s) => s.setAuthMode);
   const setPendingPlan = useApp((s) => s.setPendingPlan);
@@ -45,17 +45,32 @@ export function LandingView() {
   const user = useApp((s) => s.user);
   const setShareOpen = useApp((s) => s.setShareOpen);
 
-  const [previewOps, setPreviewOps] = useState<Opportunity[]>([]);
+  // État initial peuplé côté SSR — les cartes s'affichent immédiatement (bon pour le SEO)
+  const [previewOps, setPreviewOps] = useState<Opportunity[]>(initialOpportunities);
 
   useEffect(() => {
-    // Fetch a few live opportunities for the preview (Découverte level)
-    fetch("/api/opportunities?limit=4")
+    // Rafraîchit les opportunités côté client pour avoir les plus récentes
+    // (l'état SSR sert d'amorce pour éviter le flash de skeletons)
+    if (initialOpportunities.length > 0) {
+      // Re-fetch léger après quelques secondes pour rafraîchir
+      const t = setTimeout(() => {
+        fetch("/api/opportunities?limit=6")
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => {
+            if (d?.opportunities?.length) setPreviewOps(d.opportunities);
+          })
+          .catch(() => {});
+      }, 4000);
+      return () => clearTimeout(t);
+    }
+    // Pas d'amorce SSR → fetch immédiat
+    fetch("/api/opportunities?limit=6")
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (d?.opportunities?.length) setPreviewOps(d.opportunities);
       })
       .catch(() => {});
-  }, []);
+  }, [initialOpportunities.length]);
 
   const startFree = () => {
     if (user) setView("dashboard");

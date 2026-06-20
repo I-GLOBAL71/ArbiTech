@@ -2,13 +2,14 @@ import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { AppShell } from "@/components/app/app-shell";
 import { PLAN_LABELS } from "@/lib/constants";
+import { getVisibleOpportunities } from "@/lib/opportunity-service";
 
 // SSR: pré-charge les données pour le référencement (Google voit le HTML complet)
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Page() {
-  const [plans, platforms, user] = await Promise.all([
+  const [plans, platforms, user, oppsResult] = await Promise.all([
     db.plan
       .findMany({ where: { isActive: true }, orderBy: { sortOrder: "asc" } })
       .then((ps) => ps.map((p) => ({ ...p, features: JSON.parse(p.features) })))
@@ -17,6 +18,7 @@ export default async function Page() {
       .findMany({ where: { isActive: true }, orderBy: { name: "asc" } })
       .catch(() => []),
     getCurrentUser().catch(() => null),
+    getVisibleOpportunities({ limit: 6 }).catch(() => ({ opportunities: [], total: 0, lockedCount: 0, plan: { code: "DECOUVERTE", name: "Découverte", isRealTime: false, delaySeconds: 300 } })),
   ]);
 
   const initialCatalog = {
@@ -60,5 +62,5 @@ export default async function Page() {
       }
     : null;
 
-  return <AppShell initialCatalog={initialCatalog} initialUser={initialUser} />;
+  return <AppShell initialCatalog={initialCatalog} initialUser={initialUser} initialOpportunities={oppsResult.opportunities} />;
 }

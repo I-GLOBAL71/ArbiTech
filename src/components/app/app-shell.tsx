@@ -11,7 +11,7 @@ import { DashboardView } from "@/components/app/views/dashboard-view";
 import { AdminView } from "@/components/app/views/admin-view";
 import { AmbassadorView } from "@/components/app/views/ambassador-view";
 import { PricingView } from "@/components/app/views/pricing-view";
-import type { PlanInfo, PlatformInfo, UserInfo } from "@/lib/types";
+import type { PlanInfo, PlatformInfo, UserInfo, Opportunity } from "@/lib/types";
 
 type InitialCatalog = {
   plans: PlanInfo[];
@@ -22,9 +22,11 @@ type InitialCatalog = {
 export function AppShell({
   initialCatalog,
   initialUser,
+  initialOpportunities,
 }: {
   initialCatalog: InitialCatalog;
   initialUser: UserInfo | null;
+  initialOpportunities: Opportunity[];
 }) {
   const view = useApp((s) => s.view);
   const setView = useApp((s) => s.setView);
@@ -79,7 +81,7 @@ export function AppShell({
     <div className="relative min-h-screen flex flex-col aurora-bg">
       <Navbar />
       <main className="flex-1 flex flex-col">
-        {view === "landing" && <LandingView />}
+        {view === "landing" && <LandingView initialOpportunities={initialOpportunities} />}
         {view === "auth" && <AuthView />}
         {view === "pricing" && <PricingView />}
         {view === "dashboard" && <DashboardView />}
