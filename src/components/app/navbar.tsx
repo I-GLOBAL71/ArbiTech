@@ -33,6 +33,8 @@ const NAV_LINKS = [
   { label: "Opportunités", target: "opportunities" },
   { label: "Tarifs", view: "pricing" as const },
   { label: "Ambassadeur", view: "ambassador" as const },
+  { label: "Blog", view: "blog" as const },
+  { label: "Outils", view: "tools" as const },
   { label: "FAQ", target: "faq" },
 ];
 

@@ -1,4 +1,4 @@
-export type View = "landing" | "auth" | "dashboard" | "admin" | "ambassador" | "pricing";
+export type View = "landing" | "auth" | "dashboard" | "admin" | "ambassador" | "pricing" | "blog" | "tools";
 
 export type PlanCode = "DECOUVERTE" | "PRO" | "INSTITUTIONNEL";
 

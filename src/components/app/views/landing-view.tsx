@@ -32,6 +32,7 @@ import {
   Target,
 } from "lucide-react";
 import { OpportunityCard } from "@/components/app/opportunity-card";
+import { PriceTicker } from "@/components/app/price-ticker";
 import { formatFcfa, formatPercent } from "@/lib/format";
 import type { Opportunity } from "@/lib/types";
 import { planToneClass } from "@/lib/constants";
@@ -179,24 +180,27 @@ export function LandingView({ initialOpportunities = [] }: { initialOpportunitie
         </div>
       </section>
 
+      {/* ===== PRICE TICKER (défilement temps réel) ===== */}
+      <PriceTicker />
+
       {/* ===== PLATFORMS STRIP ===== */}
-      <section className="border-y border-white/5 bg-background/40">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 py-6">
-          <p className="text-center text-xs uppercase tracking-widest text-muted-foreground mb-4">
+      <section className="bg-background/40">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 py-5">
+          <p className="text-center text-xs uppercase tracking-widest text-muted-foreground mb-3">
             Nous surveillons en permanence ces plateformes
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
             {platforms.map((p) => (
-              <div key={p.code} className="flex items-center gap-2 glass rounded-xl px-4 py-2">
+              <div key={p.code} className="flex items-center gap-2 glass rounded-xl px-3 py-1.5">
                 <span
-                  className="grid place-items-center w-8 h-8 rounded-lg text-white text-sm font-bold"
+                  className="grid place-items-center w-7 h-7 rounded-lg text-white text-xs font-bold"
                   style={{ background: p.color }}
                 >
                   {p.logo}
                 </span>
                 <div>
-                  <div className="text-sm font-semibold">{p.name}</div>
-                  <div className="text-[10px] text-muted-foreground">{p.pairsCount} paires</div>
+                  <div className="text-xs font-semibold leading-tight">{p.name}</div>
+                  <div className="text-[10px] text-muted-foreground leading-tight">{p.pairsCount} paires</div>
                 </div>
               </div>
             ))}

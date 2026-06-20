@@ -157,6 +157,42 @@ const faqJsonLd = {
   ],
 };
 
+const blogJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Blog ArbiTech",
+  url: `${SITE_URL}/?view=blog`,
+  description:
+    "Guides simples pour comprendre l'arbitrage crypto, gagner de l'argent en P2P FCFA, et utiliser les outils ArbiTech.",
+  publisher: { "@type": "Organization", name: "ArbiTech", url: SITE_URL },
+  blogPost: [
+    {
+      "@type": "BlogPosting",
+      headline: "C'est quoi l'arbitrage crypto ? Le guide simple pour débutants",
+      url: `${SITE_URL}/?view=blog`,
+      datePublished: "2025-06-15",
+      keywords: ["arbitrage crypto FCFA", "arbitrage crypto débutant", "gagner argent crypto"],
+      author: { "@type": "Organization", name: "ArbiTech" },
+    },
+    {
+      "@type": "BlogPosting",
+      headline: "Comment gagner de l'argent avec le P2P Binance en FCFA",
+      url: `${SITE_URL}/?view=blog`,
+      datePublished: "2025-06-18",
+      keywords: ["gagner argent P2P Binance", "USDT FCFA", "arbitrage P2P Afrique"],
+      author: { "@type": "Organization", name: "ArbiTech" },
+    },
+    {
+      "@type": "BlogPosting",
+      headline: "Comparateur de prix USDT : Bybit vs OKX vs KuCoin vs Binance",
+      url: `${SITE_URL}/?view=blog`,
+      datePublished: "2025-06-20",
+      keywords: ["comparateur prix USDT Bybit OKX", "meilleur prix USDT"],
+      author: { "@type": "Organization", name: "ArbiTech" },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -176,6 +212,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
         />
       </head>
       <body

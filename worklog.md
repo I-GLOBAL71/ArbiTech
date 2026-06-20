@@ -117,3 +117,27 @@ Stage Summary:
 - Lint clean, aucun erreur runtime, SEO SSR + JSON-LD + PWA installable.
 - Temps réel WebSocket opérationnel à travers le gateway Caddy.
 - Toutes les contraintes du cahier des charges respectées : public non digital (langage "recette de cuisine"), SEO élite, design immersif aurora/améthyste, PWA, 3 plans, admin back-office, programme ambassadeur ouvert à tous, scraping simulé furtif (jitter), mise en cache.
+
+---
+Task ID: EXTRA-1
+Agent: orchestrator (Z.ai Code)
+Task: Implémenter les 3 éléments manquants — ticker de prix défilant, sitemap.xml, pages Blog + Outils gratuits.
+
+Work Log:
+- Créé PriceTicker component (price-ticker.tsx) : défilement infini via .animate-ticker, 7 actifs (USDT, USDC, BTC, ETH, BNB, SOL, TRX) avec prix FCFA + variation %, micro-fluctuations pseudo temps réel toutes les 2.2s, fade edges.
+- Intégré le ticker dans landing-view (remplace le strip plateformes statique par ticker + bandeau compact).
+- Créé app/sitemap.ts : 5 URLs (/, ?view=pricing, ?view=ambassador, ?view=blog, ?view=tools) avec priorités et fréquences.
+- Étendu le type View avec "blog" et "tools" (types.ts, app-shell, store guard).
+- Créé lib/blog-content.ts : 6 articles SEO complets (arbitrage crypto FCFA, gagner argent P2P Binance, comparateur USDT Bybit/OKX/KuCoin/Binance, 5 erreurs arbitrage, parrainage ambassadeur, installer PWA) — chaque article avec slug, excerpt, catégorie, mots-clés, contenu multi-paragraphes.
+- Créé blog-view.tsx : liste filtrable (catégories + recherche) + vue article détail avec rendu markdown-lite (**gras**, listes -), CTA inscription.
+- Créé tools-view.tsx : 3 outils interactifs — (1) Calculateur de profit d'arbitrage (achat/vente/volume/frais → profit brut/net/rendement), (2) Convertisseur crypto↔FCFA (7 actifs, 2 directions), (3) Glossaire de 14 termes (accordion).
+- Ajouté JSON-LD Blog + BlogPosting (3 articles) dans layout.tsx.
+- Mis à jour navbar (liens Blog + Outils) et footer (liens réels au lieu de placeholders #).
+- Vérifié via Agent Browser : ticker défile (USDT 615.18 FCFA +0.81%…), blog affiche 6 articles + lecture d'article, calculateur calcule profit net 6 850 FCFA, convertisseur affiche 61 500 FCFA pour 100 USDT, glossaire 14 termes, sitemap.xml 5 URLs, JSON-LD Blog dans le HTML.
+- Lint clean, services tous OK.
+
+Stage Summary:
+- 3 fonctionnalités livrées : ticker temps réel, sitemap SEO, blog + outils gratuits.
+- Le blog contient 6 articles substantiels riches en mots-clés du cahier des charges (arbitrage crypto FCFA, P2P Binance, comparateur USDT).
+- Les outils sont interactifs et gratuits (sans inscription).
+- SEO renforcé : sitemap.xml + JSON-LD Blog/BlogPosting + contenu sémantique H1/H2 dans les articles.

@@ -11,6 +11,8 @@ import { DashboardView } from "@/components/app/views/dashboard-view";
 import { AdminView } from "@/components/app/views/admin-view";
 import { AmbassadorView } from "@/components/app/views/ambassador-view";
 import { PricingView } from "@/components/app/views/pricing-view";
+import { BlogView } from "@/components/app/views/blog-view";
+import { ToolsView } from "@/components/app/views/tools-view";
 import type { PlanInfo, PlatformInfo, UserInfo, Opportunity } from "@/lib/types";
 
 type InitialCatalog = {
@@ -50,7 +52,7 @@ export function AppShell({
       const url = new URL(window.location.href);
       const v = url.searchParams.get("view");
       const ref = url.searchParams.get("ref");
-      if (v && ["landing", "auth", "dashboard", "admin", "ambassador", "pricing"].includes(v)) {
+      if (v && ["landing", "auth", "dashboard", "admin", "ambassador", "pricing", "blog", "tools"].includes(v)) {
         useApp.setState({ view: v as never });
       }
       if (ref) {
@@ -87,6 +89,8 @@ export function AppShell({
         {view === "dashboard" && <DashboardView />}
         {view === "admin" && <AdminView />}
         {view === "ambassador" && <AmbassadorView />}
+        {view === "blog" && <BlogView />}
+        {view === "tools" && <ToolsView />}
       </main>
       <SiteFooter />
       <FloatingShare />

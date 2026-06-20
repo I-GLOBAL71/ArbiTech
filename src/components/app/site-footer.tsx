@@ -54,8 +54,8 @@ export function SiteFooter() {
             <ul className="space-y-2 text-sm">
               <li><button onClick={() => setView("ambassador")} className="hover:text-primary transition-colors">Programme ambassadeur</button></li>
               <li><button onClick={() => setView("ambassador")} className="hover:text-primary transition-colors">Devenir parrain</button></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Outils gratuits</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
+              <li><button onClick={() => setView("tools")} className="hover:text-primary transition-colors">Outils gratuits</button></li>
+              <li><button onClick={() => setView("blog")} className="hover:text-primary transition-colors">Blog</button></li>
             </ul>
           </div>
 
