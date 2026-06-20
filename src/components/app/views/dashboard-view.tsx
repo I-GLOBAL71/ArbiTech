@@ -30,6 +30,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { OpportunityCard } from "@/components/app/opportunity-card";
+import { TimeText } from "@/components/app/time-text";
 import { useNotifications } from "@/hooks/use-notifications";
 import {
   Zap, Bell, BellOff, BellRing, Filter, Search, RefreshCw, Wifi, WifiOff, TrendingUp, Crown,
@@ -291,7 +292,7 @@ export function DashboardView() {
                       <div className="flex items-center gap-2 w-full">
                         {!n.read && <span className="w-2 h-2 rounded-full bg-fuchsia-500 flex-shrink-0" />}
                         <span className="font-semibold text-sm flex-1">{n.title}</span>
-                        <span className="text-[10px] text-muted-foreground">{timeAgo(n.createdAt)}</span>
+                        <span className="text-[10px] text-muted-foreground"><TimeText date={n.createdAt} formatter={timeAgo} intervalMs={10000} /></span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5 pl-4">{n.body}</p>
                     </DropdownMenuItem>
@@ -394,7 +395,7 @@ export function DashboardView() {
         <StatTile icon={Activity} label="Opportunités actives" value={String(filteredOps.length)} tone="violet" />
         <StatTile icon={TrendingUp} label="Profit moyen" value={filteredOps.length ? formatPercent(filteredOps.reduce((s, o) => s + o.profitPercent, 0) / filteredOps.length) : "—"} tone="emerald" />
         <StatTile icon={Zap} label="Meilleur profit" value={filteredOps.length ? formatPercent(Math.max(...filteredOps.map((o) => o.profitPercent))) : "—"} tone="amber" />
-        <StatTile icon={Clock} label="Dernière mise à jour" value={lastUpdate ? timeAgo(lastUpdate) : "—"} tone="teal" />
+        <StatTile icon={Clock} label="Dernière mise à jour" value={lastUpdate ? <TimeText date={lastUpdate} formatter={timeAgo} intervalMs={2000} /> : "—"} tone="teal" />
       </div>
 
       {/* Filters bar */}
@@ -528,7 +529,7 @@ function RealDataBanner({ ops }: { ops: Opportunity[] }) {
   );
 }
 
-function StatTile({ icon: Icon, label, value, tone }: { icon: any; label: string; value: string; tone: string }) {
+function StatTile({ icon: Icon, label, value, tone }: { icon: any; label: string; value: React.ReactNode; tone: string }) {
   const tones: Record<string, string> = {
     violet: "from-violet-500/20 to-fuchsia-500/20 text-violet-300",
     emerald: "from-emerald-500/20 to-teal-500/20 text-emerald-300",

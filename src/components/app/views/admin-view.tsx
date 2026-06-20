@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useApp } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { TimeText } from "@/components/app/time-text";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -674,7 +675,7 @@ function OverviewSection() {
                       <span className="text-xs text-muted-foreground">Gratuit</span>
                     )}
                     <p className="text-[10px] text-muted-foreground mt-0.5">
-                      {timeAgo(s.createdAt)}
+                      <TimeText date={s.createdAt} formatter={timeAgo} intervalMs={30000} />
                     </p>
                   </div>
                 </div>
@@ -948,7 +949,7 @@ function UsersSection() {
                     <UserStatusBadge status={u.status} />
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">
-                    {timeAgo(u.createdAt)}
+                    <TimeText date={u.createdAt} formatter={timeAgo} intervalMs={60000} />
                   </TableCell>
                   <TableCell className="text-right pr-4">
                     <DropdownMenu>
@@ -1759,7 +1760,7 @@ function ScrapersSection() {
                   <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-white/5">
                     <span className="flex items-center gap-1.5">
                       <Clock className="w-3 h-3" />
-                      Dernier sync : {s.lastSyncAt ? timeAgo(s.lastSyncAt) : "—"}
+                      Dernier sync : {s.lastSyncAt ? <TimeText date={s.lastSyncAt} formatter={timeAgo} intervalMs={5000} /> : "—"}
                     </span>
                     <span>{s.pairsCount} paires</span>
                   </div>

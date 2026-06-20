@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApp } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+import { TimeText } from "@/components/app/time-text";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
@@ -1053,7 +1054,7 @@ export function AmbassadorView() {
                             <p className="text-sm font-medium truncate">{displayName(r)}</p>
                             <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                               <Clock className="w-3 h-3" />
-                              {timeAgo(r.createdAt)}
+                              <TimeText date={r.createdAt} formatter={timeAgo} intervalMs={60000} />
                               {r.plan && (
                                 <>
                                   <span>·</span>
@@ -1124,7 +1125,7 @@ export function AmbassadorView() {
                             </p>
                             <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                               <Clock className="w-3 h-3" />
-                              {timeAgo(e.createdAt)}
+                              <TimeText date={e.createdAt} formatter={timeAgo} intervalMs={60000} />
                             </p>
                           </div>
                           <div className="text-right">

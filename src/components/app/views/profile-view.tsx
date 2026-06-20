@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useApp } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+import { TimeText } from "@/components/app/time-text";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -919,7 +920,7 @@ function ActiveSubscriptionCard({
               ? `${daysLeft} jour${daysLeft > 1 ? "s" : ""}`
               : "Expire bientôt"}
           </span>
-          <span className="text-muted-foreground text-xs">({timeUntil(subscription.endDate)})</span>
+          <span className="text-muted-foreground text-xs">(<TimeText date={subscription.endDate} formatter={timeUntil} intervalMs={30000} />)</span>
         </div>
       </div>
 

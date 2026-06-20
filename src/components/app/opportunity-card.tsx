@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, TrendingUp, Clock, Lock, Zap, Activity } from "lucide-react";
 import { formatFcfa, formatPercent, formatPrice, timeUntil } from "@/lib/format";
+import { TimeText } from "@/components/app/time-text";
 import type { Opportunity } from "@/lib/types";
 
 export function OpportunityCard({
@@ -54,7 +55,7 @@ export function OpportunityCard({
         </div>
         <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
           <Clock className="w-3 h-3" />
-          <span>{timeUntil(op.expiresAt)}</span>
+          <TimeText date={op.expiresAt} formatter={timeUntil} intervalMs={1000} />
         </div>
       </div>
 

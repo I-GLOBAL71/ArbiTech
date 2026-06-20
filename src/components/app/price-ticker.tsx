@@ -12,11 +12,13 @@ type TickerItem = {
   currency: "FCFA" | "USDT";
 };
 
+// Valeurs initiales STABLES (zéro variation) pour garantir un rendu SSR/Client identique.
+// La variation aléatoire est appliquée côté client après montage (useEffect ci-dessous).
 const BASE_TICKER: TickerItem[] = BASE_ASSETS.map((a) => ({
   symbol: a.symbol,
   name: a.name,
   price: a.basePriceFcfa,
-  change: (Math.random() - 0.5) * 4,
+  change: 0,
   currency: "FCFA" as const,
 }));
 
@@ -32,8 +34,14 @@ function formatTickerPrice(value: number, currency: string) {
 export function PriceTicker() {
   const [items, setItems] = useState<TickerItem[]>(BASE_TICKER);
 
-  // Micro-fluctuations pseudo temps réel (jitter doux)
+  // Micro-fluctuations pseudo temps réel (jitter doux) — appliquées seulement après montage
+  // pour éviter un mismatch d'hydration (Math.random differ entre serveur et client).
   useEffect(() => {
+    // Première fluctuation immédiate au montage
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- init randomness post-mount for hydration safety
+    setItems((prev) =>
+      prev.map((it) => ({ ...it, change: (Math.random() - 0.5) * 4 }))
+    );
     const interval = setInterval(() => {
       setItems((prev) =>
         prev.map((it) => {
