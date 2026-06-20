@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "prisma generate && next build",
+  "installCommand": "bun install",
+  "crons": [
+    {
+      "path": "/api/cron/warm-cache?secret=CHANGE_ME_IN_VERCEL_ENV",
+      "schedule": "*/1 * * * *"
+    }
+  ],
+  "regions": ["fra1"]
+}

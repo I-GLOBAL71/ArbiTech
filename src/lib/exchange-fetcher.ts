@@ -288,9 +288,5 @@ export async function fetchMarketSnapshot(): Promise<MarketSnapshot> {
   return snapshot;
 }
 
-// Test rapide (utilisable en CLI)
-if (require.main === module) {
-  fetchMarketSnapshot().then((s) => {
-    console.log(JSON.stringify(s, null, 2));
-  });
-}
+// Test rapide (CLI) : `bun -e "import('./src/lib/exchange-fetcher.ts').then(m => m.fetchMarketSnapshot().then(s => console.log(JSON.stringify(s,null,2))))"`
+
