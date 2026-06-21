@@ -48,28 +48,28 @@ export function LandingView({ initialOpportunities = [] }: { initialOpportunitie
   const setShareOpen = useApp((s) => s.setShareOpen);
 
   // État initial peuplé côté SSR — les cartes s'affichent immédiatement (bon pour le SEO)
-  const [previewOps, setPreviewOps] = useState<Opportunity[]>(initialOpportunities);
+  // On ne garde que les opportunités rentables (profit > 0) pour la landing page.
+  const profitableOnly = (ops: Opportunity[]) => ops.filter((o) => o.profitPercent > 0);
+  const [previewOps, setPreviewOps] = useState<Opportunity[]>(profitableOnly(initialOpportunities));
 
   useEffect(() => {
     // Rafraîchit les opportunités côté client pour avoir les plus récentes
     // (l'état SSR sert d'amorce pour éviter le flash de skeletons)
     if (initialOpportunities.length > 0) {
-      // Re-fetch léger après quelques secondes pour rafraîchir
       const t = setTimeout(() => {
-        fetch("/api/opportunities?limit=6")
+        fetch("/api/opportunities?limit=10&minProfit=0.01")
           .then((r) => (r.ok ? r.json() : null))
           .then((d) => {
-            if (d?.opportunities?.length) setPreviewOps(d.opportunities);
+            if (d?.opportunities?.length) setPreviewOps(profitableOnly(d.opportunities));
           })
           .catch(() => {});
       }, 4000);
       return () => clearTimeout(t);
     }
-    // Pas d'amorce SSR → fetch immédiat
-    fetch("/api/opportunities?limit=6")
+    fetch("/api/opportunities?limit=10&minProfit=0.01")
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
-        if (d?.opportunities?.length) setPreviewOps(d.opportunities);
+        if (d?.opportunities?.length) setPreviewOps(profitableOnly(d.opportunities));
       })
       .catch(() => {});
   }, [initialOpportunities.length]);
